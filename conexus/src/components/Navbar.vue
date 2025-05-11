@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-    <v-navigation-drawer color="deep-blue" permanent class="pt-4 pb-4">
+    <v-navigation-drawer color="deep-blue" stateless class="pt-4 pb-4" >
         <v-container class="d-flex flex-column fill-height justify-space-between pa-0">
 
             <div class="d-flex flex-row pa-4">

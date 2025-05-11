@@ -29,6 +29,7 @@ const vuetify = createVuetify({
         colors: {
           'white': '#fff',
           'deep-blue': '#0d2845',
+          'blue': '#1E62BF',
           'orange': '#ec7616'
         }
       }
