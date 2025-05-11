@@ -22,6 +22,18 @@ const vuetify = createVuetify({
       mdi,
     },
   },
+   theme: {
+    defaultTheme: 'myCustomTheme',
+    themes: {
+      myCustomTheme: {
+        colors: {
+          'white': '#fff',
+          'deep-blue': '#0d2845',
+          'orange': '#ec7616'
+        }
+      }
+    }
+  }
 });
 
 const app = createApp(App)
