@@ -9,7 +9,7 @@ import PlanOverviewCard from '../components/PlanOverviewCard.vue'
             <Navbar />
         </div>
         <div class="planManagementContainer__content">
-            <v-card color="deep-blue" class="rounded-xl pa-12" style="width: 95%;">
+            <v-card color="deep-blue" class="rounded-xl pa-8" style="width: 95%;">
                 <v-card-item>
                     <div>
                         <div class="text-h6 text-center font-weight-bold">
@@ -31,20 +31,20 @@ import PlanOverviewCard from '../components/PlanOverviewCard.vue'
             <div class="d-flex justify-space-between align-center" style="width: 95%;">
                 <div class="text-h6 font-weight-bold text-custom" prepend-icon="mdi mdi-check-circle">Planos disponíveis
                 </div>
-                <v-btn variant="outlined" size="large" color="blue">Ver detalhes</v-btn>
+                <v-btn variant="outlined" color="blue">Ver detalhes</v-btn>
             </div>
 
             <v-row dense style="width: 95%;">
-                <v-col cols="12" sm="6" md="6" lg="3">
+                <v-col cols="12" sm="6" md="6" lg="6">
                     <PlanOverviewCard />
                 </v-col>
-                <v-col cols="12" sm="6" md="6" lg="3">
+                <v-col cols="12" sm="6" md="6" lg="6">
                     <PlanOverviewCard />
                 </v-col>
-                <v-col cols="12" sm="6" md="6" lg="3">
+                <v-col cols="12" sm="6" md="6" lg="6">
                     <PlanOverviewCard />
                 </v-col>
-                <v-col cols="12" sm="6" md="6" lg="3">
+                <v-col cols="12" sm="6" md="6" lg="6">
                     <PlanOverviewCard />
                 </v-col>
             </v-row>
@@ -68,7 +68,7 @@ import PlanOverviewCard from '../components/PlanOverviewCard.vue'
 .planManagementContainer__content {
     width: 90%;
     min-height: 100vh;
-    margin-left: 15%;
+    margin-left: 20%;
     padding: 48px 64px;
     display: flex;
     flex-direction: column;
