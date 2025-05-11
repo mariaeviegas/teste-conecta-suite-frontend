@@ -22,7 +22,7 @@ import PlanOverviewCard from '../components/PlanOverviewCard.vue'
                 </v-card-item>
 
                 <v-card-actions class="justify-center mt-6">
-                    <v-btn variant="outlined" color="orange">
+                    <v-btn variant="outlined">
                         Saiba mais
                     </v-btn>
                 </v-card-actions>
