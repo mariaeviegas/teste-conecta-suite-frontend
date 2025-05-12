@@ -1,6 +1,6 @@
 <script setup>
 import Navbar from '../components/Navbar.vue'
-import PlanOverviewCard from '../components/PlanOverviewCard.vue'
+import PlanDetailsCard from '../components/PlanDetailsCard.vue';
 </script>
 
 <template>
@@ -36,16 +36,16 @@ import PlanOverviewCard from '../components/PlanOverviewCard.vue'
 
             <v-row dense style="width: 95%;">
                 <v-col cols="12" sm="6" md="6" lg="6">
-                    <PlanOverviewCard />
+                    <PlanDetailsCard/>
                 </v-col>
                 <v-col cols="12" sm="6" md="6" lg="6">
-                    <PlanOverviewCard />
+                    <PlanDetailsCard/>
                 </v-col>
                 <v-col cols="12" sm="6" md="6" lg="6">
-                    <PlanOverviewCard />
+                    <PlanDetailsCard/>
                 </v-col>
                 <v-col cols="12" sm="6" md="6" lg="6">
-                    <PlanOverviewCard />
+                    <PlanDetailsCard/>
                 </v-col>
             </v-row>
         </div>
