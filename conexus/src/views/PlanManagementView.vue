@@ -1,6 +1,61 @@
 <script setup>
 import Navbar from '../components/Navbar.vue'
 import PlanDetailsCard from '../components/PlanDetailsCard.vue';
+
+import { ref, computed } from 'vue'
+
+const modo = ref('mensal')
+
+const planosBase = [
+    {
+        name: 'Basic',
+        description: 'Ideal para freelancers, MEIs.',
+        mensal: 0,
+        anual: 0,
+        setup: 149,
+        isActualPlan: true,
+        isAdditional: true
+    },
+    {
+        name: 'Essential',
+        description: 'Ideal para pequenas equipes...',
+        mensal: 49,
+        anual: 499,
+        setup: 149,
+        isActualPlan: false,
+        isAdditional: true
+    },
+    {
+        name: 'Professional',
+        description: 'Para equipes que assinam muitos documentos.',
+        mensal: 99,
+        anual: 999,
+        setup: 149,
+        isActualPlan: false,
+        isAdditional: true
+    },
+    {
+        name: 'Enterprise',
+        description: 'Plano personalizado para grandes empresas.',
+        mensal: 199,
+        anual: 1999,
+        setup: 149,
+        isActualPlan: false,
+        isAdditional: true
+    }
+]
+
+const planosComPreco = computed(() => {
+    return planosBase.map(p => ({
+        planName: p.name,
+        planDescription: p.description,
+        planPrice: modo.value === 'mensal' ? p.mensal : p.anual,
+        type: modo.value,
+        setupPrice: p.setup,
+        isActualPlan: p.isActualPlan,
+        isAdditional: p.isAdditional
+    }))
+})
 </script>
 
 <template>
@@ -31,21 +86,16 @@ import PlanDetailsCard from '../components/PlanDetailsCard.vue';
             <div class="d-flex justify-space-between align-center" style="width: 95%;">
                 <div class="text-h6 font-weight-bold text-custom" prepend-icon="mdi mdi-check-circle">Planos disponíveis
                 </div>
-                <v-btn variant="outlined" color="blue">Ver detalhes</v-btn>
+                <v-btn-toggle v-model="modo" mandatory class="my-6 rounded-xl" group density="compact"
+                    color="deep-blue">
+                    <v-btn value="mensal">Mensal</v-btn>
+                    <v-btn value="anual">Anual</v-btn>
+                </v-btn-toggle>
             </div>
 
             <v-row dense style="width: 95%;">
-                <v-col cols="12" sm="6" md="6" lg="6">
-                    <PlanDetailsCard/>
-                </v-col>
-                <v-col cols="12" sm="6" md="6" lg="6">
-                    <PlanDetailsCard/>
-                </v-col>
-                <v-col cols="12" sm="6" md="6" lg="6">
-                    <PlanDetailsCard/>
-                </v-col>
-                <v-col cols="12" sm="6" md="6" lg="6">
-                    <PlanDetailsCard/>
+                <v-col v-for="(plano, index) in planosComPreco" :key="index" cols="12" sm="6" md="6" lg="6">
+                    <PlanDetailsCard v-bind="plano" />
                 </v-col>
             </v-row>
         </div>
