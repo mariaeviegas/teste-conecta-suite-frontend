@@ -84,7 +84,7 @@ const colunas = computed(() => {
 </script>
 
 <template>
-    <v-card class="mx-auto pa-8 rounded-xl" :style="isActualPlan ? 'border: 1px solid #fff;' : 'border: 1px solid #0d2845;'" :color="isActualPlan ? 'deep-blue' : 'white'">
+    <v-card class="mx-auto pa-4 rounded-xl" :style="isActualPlan ? 'border: 1px solid #fff;' : 'border: 1px solid #0d2845;'" :color="isActualPlan ? 'deep-blue' : 'white'">
         <v-row :dense="modal">
             <v-col v-for="(coluna, colunaIndex) in colunas" :key="colunaIndex" :cols="modal ? 6 : 12">
                 <div v-for="(item, i) in coluna" :key="i" class="d-flex align-center mb-2" v-if="isActualPlan">

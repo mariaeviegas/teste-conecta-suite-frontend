@@ -41,7 +41,7 @@ const formatPrice = (value) => {
 </script>
 
 <template>
-    <v-card :color="isActualPlan ? 'deep-blue' : 'white'" class="rounded-xl pa-4" style="height: 100%;">
+    <v-card :color="isActualPlan ? 'deep-blue' : 'white'" class="rounded-xl pa-4" style="height: 100%;" elevation="4">
         <v-card-item>
             <div>
                 <div :class="isActualPlan ? 'text-h6 font-weight-bold text-custom-actual' : 'text-h6 font-weight-bold text-custom'">{{ planName }}</div>
@@ -62,7 +62,7 @@ const formatPrice = (value) => {
             <div v-else-if="planName != 'Enterprise'" class="font-weight-bold text-center text-custom-check text-subtitle-2 mt-8" style="width: 80%; margin: auto;">Setup inicial personalizado está disponível à parte por R$ {{ formatPrice(setupPrice) }}</div>
             <div v-else class="font-weight-bold text-center text-custom-check text-subtitle-2 mt-8" style="width: 80%; margin: auto;">Setup inicial personalizado está incluso no plano</div>
 
-            <v-btn v-if="!isActualPlan" size="large" rounded="xl" color="orange" block class="mt-8">Selecionar plano</v-btn>
+            <v-btn v-if="!isActualPlan" size="large" rounded="xl" color="orange" block class="mt-8" @click="$emit('select')">Selecionar plano</v-btn>
             <v-btn v-else size="large" rounded="xl" color="white" block class="mt-8" variant="outlined" disabled>Plano atual</v-btn>
         </v-card-item>
     </v-card>

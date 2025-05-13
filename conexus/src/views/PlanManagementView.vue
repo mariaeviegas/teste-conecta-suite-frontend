@@ -1,15 +1,23 @@
 <script setup>
 import Navbar from '../components/Navbar.vue'
 import PlanDetailsCard from '../components/PlanDetailsCard.vue';
+import PlanModal from '../components/PlanModal.vue';
 import { ref, computed, onMounted } from 'vue'
 import api from '../plugins/axios.js';
+
+const showDialog = ref(false)
+const planoSelecionado = ref(null)
+
+const abrirModal = (plano) => {
+  planoSelecionado.value = plano
+  showDialog.value = true
+}
 
 const modo = ref('mensal')
 const plans = ref([])
 const userData = JSON.parse(localStorage.getItem('user')) || {}
 const actualPlanName = userData.actualPlan
 const hasSetup = userData.hasSetup
-
 
 const getPlans = () => {
     api.get(`/plans`)
@@ -44,7 +52,7 @@ const planosComPreco = computed(() => {
             <Navbar />
         </div>
         <div class="planManagementContainer__content">
-            <v-card color="deep-blue" class="rounded-xl pa-8" style="width: 95%;">
+            <v-card color="deep-blue" class="rounded-xl pa-8" style="width: 95%;" elevation="4">
                 <v-card-item>
                     <div>
                         <div class="text-h6 text-center font-weight-bold">
@@ -75,11 +83,15 @@ const planosComPreco = computed(() => {
           
             <v-row style="width: 100%;">
                 <v-col v-for="(plano, index) in planosComPreco" :key="index" cols="12" sm="6" md="6" lg="6">
-                    <PlanDetailsCard v-bind="plano"/>
+                    <PlanDetailsCard v-bind="plano" @select="abrirModal(plano)"/>
                 </v-col>
             </v-row>
+
+             <PlanModal :open="showDialog" :plano="planoSelecionado" @close="showDialog = false" />
         </div>
     </div>
+
+    
 </template>
 
 <style>
