@@ -73,7 +73,7 @@ const planosComPreco = computed(() => {
                 </v-btn-toggle>
             </div>
           
-            <v-row dense style="width: 95%;">
+            <v-row style="width: 100%;">
                 <v-col v-for="(plano, index) in planosComPreco" :key="index" cols="12" sm="6" md="6" lg="6">
                     <PlanDetailsCard v-bind="plano"/>
                 </v-col>

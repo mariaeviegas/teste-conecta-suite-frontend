@@ -41,7 +41,7 @@ const formatPrice = (value) => {
 </script>
 
 <template>
-    <v-card :color="isActualPlan ? 'deep-blue' : 'white'" class="rounded-xl pa-4">
+    <v-card :color="isActualPlan ? 'deep-blue' : 'white'" class="rounded-xl pa-4" style="height: 100%;">
         <v-card-item>
             <div>
                 <div :class="isActualPlan ? 'text-h6 font-weight-bold text-custom-actual' : 'text-h6 font-weight-bold text-custom'">{{ planName }}</div>
