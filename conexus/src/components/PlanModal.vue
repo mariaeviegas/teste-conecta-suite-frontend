@@ -112,7 +112,7 @@ const confirmPlan = async () => {
     Swal.fire({
       title: "Ocorreu algum erro",
       text: `Ocorreu um erro ao contratar o plano ${planName.value}. Tente novamente!`,
-      icon: "success",
+      icon: "error",
       confirmButtonText: "OK",
     })  
     

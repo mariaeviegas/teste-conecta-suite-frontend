@@ -2,15 +2,21 @@
 import Navbar from '../components/Navbar.vue'
 import PlanDetailsCard from '../components/PlanDetailsCard.vue';
 import PlanModal from '../components/PlanModal.vue';
+import SetupModal from '../components/SetupModal.vue';
 import { ref, computed, onMounted } from 'vue'
 import api from '../plugins/axios.js';
 
 const showDialog = ref(false)
 const planoSelecionado = ref(null)
-
 const abrirModal = (plano) => {
   planoSelecionado.value = plano
   showDialog.value = true
+}
+
+const showSetupModal = ref(false)
+const abrirSetupModal = () => {
+  planoSelecionado.value = null
+  showSetupModal.value = true
 }
 
 const modo = ref('mensal')
@@ -44,6 +50,24 @@ const planosComPreco = computed(() => {
         hasSetup: hasSetup
     }))
 })
+
+const actualPlanDetails = computed(() => {
+    if (!plans.value.length) return null
+
+    const found = plans.value.find(p => p.label === actualPlanName)
+    return found || plans.value.find(p => p.label === 'Basic')
+})
+
+const setupPrice = computed(() => {
+  return actualPlanDetails.value?.setupPrice || 0
+})
+
+const formatPrice = (value) => {
+  return value.toLocaleString('pt-BR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })
+}
 </script>
 
 <template>
@@ -71,6 +95,13 @@ const planosComPreco = computed(() => {
                 </v-card-actions>
             </v-card>
 
+            <v-card v-if="!hasSetup" class="d-flex justify-space-between align-center pa-6 rounded-xl" style="width: 95%;" elevation="4">
+                <div class="text-subtitle-2 font-weight-bold text-custom" prepend-icon="mdi mdi-check-circle">Configuração de setup disponível por R$ {{ formatPrice(setupPrice) }}</div>
+                <v-btn prepend-icon="mdi mdi-plus-circle" color="orange" @click="abrirSetupModal()">
+                    Contratar
+                </v-btn>
+            </v-card>
+
             <div class="d-flex justify-space-between align-center" style="width: 95%;">
                 <div class="text-h6 font-weight-bold text-custom" prepend-icon="mdi mdi-check-circle">Planos disponíveis
                 </div>
@@ -88,6 +119,7 @@ const planosComPreco = computed(() => {
             </v-row>
 
              <PlanModal :open="showDialog" :plano="planoSelecionado" @close="showDialog = false" />
+             <SetupModal :open="showSetupModal" :setupPrice="setupPrice"  @close="showSetupModal = false"/>
         </div>
     </div>
 
