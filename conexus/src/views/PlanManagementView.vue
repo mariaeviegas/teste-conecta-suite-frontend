@@ -1,59 +1,39 @@
 <script setup>
 import Navbar from '../components/Navbar.vue'
 import PlanDetailsCard from '../components/PlanDetailsCard.vue';
-
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import api from '../plugins/axios.js';
 
 const modo = ref('mensal')
+const plans = ref([])
+const userData = JSON.parse(localStorage.getItem('user')) || {}
+const actualPlanName = userData.actualPlan
+const hasSetup = userData.hasSetup
 
-const planosBase = [
-    {
-        name: 'Basic',
-        description: 'Ideal para freelancers, MEIs.',
-        mensal: 0,
-        anual: 0,
-        setup: 149,
-        isActualPlan: true,
-        isAdditional: true
-    },
-    {
-        name: 'Essential',
-        description: 'Ideal para pequenas equipes...',
-        mensal: 49,
-        anual: 499,
-        setup: 149,
-        isActualPlan: false,
-        isAdditional: true
-    },
-    {
-        name: 'Professional',
-        description: 'Para equipes que assinam muitos documentos.',
-        mensal: 99,
-        anual: 999,
-        setup: 149,
-        isActualPlan: false,
-        isAdditional: true
-    },
-    {
-        name: 'Enterprise',
-        description: 'Plano personalizado para grandes empresas.',
-        mensal: 199,
-        anual: 1999,
-        setup: 149,
-        isActualPlan: false,
-        isAdditional: true
-    }
-]
+
+const getPlans = () => {
+    api.get(`/plans`)
+    .then((response) => {
+        plans.value = response.data
+    })
+    .catch((error) => {
+        console.log(error)
+    })
+}
+
+onMounted(() => {
+    getPlans()
+})
 
 const planosComPreco = computed(() => {
-    return planosBase.map(p => ({
-        planName: p.name,
+    return plans.value.map(p => ({
+        planName: p.label,
         planDescription: p.description,
-        planPrice: modo.value === 'mensal' ? p.mensal : p.anual,
+        planPrice: modo.value === 'mensal' ? p.monthlyPrice : p.yearlyPrice,
         type: modo.value,
-        setupPrice: p.setup,
-        isActualPlan: p.isActualPlan,
-        isAdditional: p.isAdditional
+        setupPrice: p.setupPrice,
+        isActualPlan: p.label === actualPlanName,
+        hasSetup: hasSetup
     }))
 })
 </script>
@@ -92,10 +72,10 @@ const planosComPreco = computed(() => {
                     <v-btn value="anual">Anual</v-btn>
                 </v-btn-toggle>
             </div>
-
+          
             <v-row dense style="width: 95%;">
                 <v-col v-for="(plano, index) in planosComPreco" :key="index" cols="12" sm="6" md="6" lg="6">
-                    <PlanDetailsCard v-bind="plano" />
+                    <PlanDetailsCard v-bind="plano"/>
                 </v-col>
             </v-row>
         </div>
