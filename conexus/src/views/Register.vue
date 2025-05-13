@@ -30,7 +30,6 @@ const register = () => {
       });
     })
     .catch((error) => {
-      console.log("erro:", error)
       Swal.fire({
         title: "Ocorreu algum erro",
         text: "Empresa não cadastrada. Tente novamente!",
@@ -45,11 +44,11 @@ const register = () => {
 <template>
     <div class="register">
         <div class="register__form">
-            <div class="w-100 pt-8 pl-8 mb-16">
+            <div class="w-100 pt-8 pl-8">
             <v-btn density="comfortable" icon="mdi-arrow-left" color="deep-blue" @click="router.push('/')"></v-btn>
             </div>
             <div>
-                <v-card class="mx-auto pa-12 pb-8" elevation="8" width="600" rounded="lg">
+                <v-card class="pl-12 pr-12 pt-8 pb-8" elevation="8" width="600" rounded="lg">
                     <div class="mb-8 text-center text-h6 text-uppercase font-weight-bold text-color-custom">Cadastro
                     </div>
                     <div class="text-subtitle-2 text-medium-emphasis">Empresa</div>
@@ -141,6 +140,7 @@ const register = () => {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: start;
     gap: 16px;
 }
 

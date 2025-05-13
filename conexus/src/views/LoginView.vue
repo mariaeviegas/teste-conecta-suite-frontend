@@ -1,10 +1,45 @@
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import api from '../plugins/axios.js';
+import Swal from "sweetalert2";
+
+const router = useRouter();
+
+const email = ref('')
+const password = ref('')
+
+const logar = () => {
+    const data = {
+      email: email.value,
+      password: password.value
+    };
+
+    api.post(`/user/login`, data)
+    .then((response) => {
+        const userData = response.data;
+        localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('token', userData.token);
+        router.push('/planos');
+    })
+    .catch(() => {
+      Swal.fire({
+        title: "Ocorreu algum erro",
+        text: "Tente fazer login novamente!",
+        icon: "error",
+        confirmButtonText: "OK",
+      }).then(() => {
+        location.reload();
+      });
+    })
+}
+</script>
 
 <template>
     <div class="login">
         <div class="login__description">
             <div>
-                <v-btn density="comfortable" icon="mdi-arrow-left"></v-btn>
+                <v-btn density="comfortable" icon="mdi-arrow-left" @click="router.push('/')"></v-btn>
             </div>
             <div class="login__description__container">
                 <div class="login__description__text">
@@ -27,25 +62,21 @@
                 <v-card class="mx-auto pa-12 pb-8" elevation="8" width="600" rounded="lg">
                     <div class="mb-8 text-center text-h6 text-uppercase font-weight-bold text-color-custom">Login</div>
                     <div class="text-subtitle-2 text-medium-emphasis">Conta</div>
-
-                    <v-text-field density="comfortable" placeholder="Insira seu e-mail" prepend-inner-icon="mdi-email-outline" variant="outlined"></v-text-field>
-
+                    <v-text-field density="comfortable" placeholder="Insira seu e-mail" prepend-inner-icon="mdi-email-outline" variant="outlined" v-model="email"></v-text-field>
+                    
                     <div class="text-subtitle-2 text-medium-emphasis d-flex align-center justify-space-between">Senha</div>
-
                     <v-text-field :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
                         :type="visible ? 'text' : 'password'" density="comfortable" placeholder="Insira sua senha"
                         prepend-inner-icon="mdi-lock-outline" variant="outlined"
-                        @click:append-inner="visible = !visible"
-                    >
-                    
-                    </v-text-field>
+                        @click:append-inner="visible = !visible" v-model="password"
+                    ></v-text-field>
 
-                    <v-btn class="mb-8" color="orange" size="large" block>
+                    <v-btn class="mb-8" color="orange" size="large" block @click="logar()">
                         Entrar
                     </v-btn>
 
                     <v-card-text class="text-center">
-                        <a class="text-blue text-decoration-none" href="#" rel="noopener noreferrer" target="_blank">
+                        <a class="text-blue text-decoration-none" rel="noopener noreferrer" @click="router.push('/cadastro')">
                             Cadastre-se <v-icon icon="mdi-chevron-right"></v-icon>
                         </a>
                     </v-card-text>
