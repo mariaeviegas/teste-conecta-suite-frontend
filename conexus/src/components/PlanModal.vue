@@ -1,11 +1,16 @@
 <script setup>
-import { defineProps, ref, computed } from 'vue'
+import { defineProps, ref, computed, defineEmits, watch } from 'vue'
 import PlansResources from './PlansResources.vue'
+import api from '../plugins/axios.js';
+import Swal from "sweetalert2";
 
 const props = defineProps({
   open: Boolean,
   plano: Object
 })
+
+const emit = defineEmits(['close'])
+const localOpen = ref(props.open)
 
 const step = ref(1)
 const setupCheck = ref(false)
@@ -14,12 +19,22 @@ const paymentMethod = ref(null)
 const nextStep = () => step.value++
 const previousStep = () => step.value--
 
+watch(() => props.open, (val) => {
+  localOpen.value = val
+})
+
 // Dados do plano atual
 const userData = JSON.parse(localStorage.getItem('user')) || {}
+const id = userData.id
 const hasSetup = userData.hasSetup
 const actualPlanName = userData.actualPlan || 'Sem plano ativo'
 const actualPlanMonthlyPrice = userData.monthlyPrice || 0
 const actualPlanYearlyPrice = userData.yearlyPrice || 0
+
+
+const actualPlanPrice = computed(() =>
+  type.value === 'mensal' ? actualPlanMonthlyPrice : actualPlanYearlyPrice
+)
 
 // Dados do plano selecionado
 const planName = computed(() => props.plano?.planName || '')
@@ -30,10 +45,7 @@ const setupPrice = computed(() =>
 )
 
 const planDifference = computed(() =>
-  type.value == 'mensal' ? 
-    planPrice.value > actualPlanMonthlyPrice ? planPrice.value - actualPlanMonthlyPrice : 0
-    :
-    planPrice.value > actualPlanYearlyPrice ? planPrice.value - actualPlanYearlyPrice : 0
+  Math.max(0, planPrice.value - actualPlanPrice.value)
 )
 
 const total = computed(() => planDifference.value + setupPrice.value)
@@ -44,10 +56,77 @@ const formatPrice = (value) => {
     maximumFractionDigits: 2
   })
 }
+
+const isUpgrade = computed(() => planPrice.value > actualPlanPrice.value)
+const isDowngrade = computed(() => planPrice.value < actualPlanPrice.value)
+const isNewPlan = actualPlanName === 'Sem plano ativo'
+
+const confirmPlan = async () => {
+  const data = {
+    plan: planName.value.toUpperCase(),
+    paymentMethod: paymentMethod.value
+  }
+
+  const endpoint = isNewPlan
+  ? `/contract/${id}`
+  : isUpgrade.value
+    ? `/plans/upgrade/${id}`
+    : `/plans/downgrade/${id}`
+
+  try {
+    const response = await api.post(endpoint, data)
+
+    emit('close')
+
+    if (isNewPlan) {
+      Swal.fire({
+        title: "Compra realizada",
+        text: `O plano ${planName.value} foi contratado com sucesso. Aproveite os benefícios!`,
+        icon: "success",
+        confirmButtonText: "OK",
+      })
+    } else {
+      Swal.fire({
+        title: "Plano alterado",
+        text: `Seu plano foi alterado para ${planName.value} com sucesso. Aproveite os benefícios!`,
+        icon: "success",
+        confirmButtonText: "OK",
+      })
+    }
+    
+    const updatedUserData = {
+      ...userData,
+      actualPlan: response.data.newPlan,
+      monthlyPrice: response.data.planMonthlyPrice,
+      yearlyPrice: response.data.planYearlyPrice
+    }
+    localStorage.setItem('user', JSON.stringify(updatedUserData))
+
+    setTimeout(() => {
+      location.reload()
+    }, 3000)
+
+  } catch (error) {
+    emit('close')
+
+    Swal.fire({
+      title: "Ocorreu algum erro",
+      text: `Ocorreu um erro ao contratar o plano ${planName.value}. Tente novamente!`,
+      icon: "success",
+      confirmButtonText: "OK",
+    })  
+    
+    setTimeout(() => {
+      location.reload()
+    }, 3000)
+  }
+  
+}
 </script>
 
 <template>
-  <v-dialog max-width="700" v-model="props.open">
+  <v-dialog max-width="700"  v-model="localOpen"
+  @update:modelValue="(val) => { if (!val) emit('close') }">
     <v-card class="d-flex flex-column">
       <v-stepper v-model="step" :items="['Revisão de dados do plano', 'Pagamento']">
         <template v-slot:item.1>
@@ -81,7 +160,13 @@ const formatPrice = (value) => {
           <div class="text-subtitle-2 font-weight-bold text-custom mb-2">Método de pagamento</div>
           <v-autocomplete
             v-model="paymentMethod"
-            :items="['Pix', 'Crédito', 'Boleto']"
+            :items="[
+              { title: 'Pix', value: 'PIX' },
+              { title: 'Cartão de Crédito', value: 'CREDIT_CARD' },
+              { title: 'Boleto', value: 'BOLETO' }
+            ]"
+            item-title="title"
+            item-value="value"
             placeholder="Selecione um método"
             density="comfortable"
             variant="outlined"
@@ -99,7 +184,7 @@ const formatPrice = (value) => {
           </div>
           <div class="d-flex justify-space-between align-center">
             <div class="text-subtitle-2 font-weight-regular text-custom">Plano atual: {{ actualPlanName }}</div>
-            <div class="text-subtitle-2 font-weight-regular text-custom">R$ {{ type == 'mensal' ? formatPrice(actualPlanMonthlyPrice) : formatPrice(actualPlanYearlyPrice) }}</div>
+            <div class="text-subtitle-2 font-weight-regular text-custom">R$ {{ formatPrice(actualPlanPrice) }}</div>
           </div>
           <div class="d-flex justify-space-between align-center">
             <div class="text-subtitle-2 font-weight-regular text-custom">Diferença a pagar</div>
@@ -121,7 +206,8 @@ const formatPrice = (value) => {
 
         <template v-slot:actions>
           <v-card-actions class="justify-end mt-4">
-            <v-btn variant="plain" @click="previousStep" :disabled="step === 1">Voltar</v-btn>
+            <v-btn v-if="step < 2" variant="plain" @click="emit('close')">Fechar</v-btn>
+            <v-btn v-else variant="plain" @click="previousStep()">Voltar</v-btn>
             <v-btn v-if="step < 2" style="background-color: #ec7616; color: white;" @click="nextStep">
               Próximo
             </v-btn>
@@ -129,7 +215,7 @@ const formatPrice = (value) => {
               v-if="step === 2"
               :disabled="!paymentMethod"
               style="background-color: #ec7616; color: white;"
-              @click="confirmarPlano"
+              @click="confirmPlan"
             >
               Confirmar Plano
             </v-btn>
