@@ -3,6 +3,7 @@ import { defineProps, ref, computed, defineEmits, watch } from 'vue'
 import PlansResources from './PlansResources.vue'
 import api from '../plugins/axios.js';
 import Swal from "sweetalert2";
+import { has } from 'vuetify/lib/util/helpers.mjs';
 
 const props = defineProps({
   open: Boolean,
@@ -76,6 +77,13 @@ const confirmPlan = async () => {
   try {
     const response = await api.post(endpoint, data)
 
+    if (setupCheck.value && !hasSetup) {
+      await api.patch(`/user/setup/${id}`, {
+        totalAmount: setupPrice.value,
+        paymentMethod: paymentMethod.value
+      })
+    }
+
     emit('close')
 
     if (isNewPlan) {
@@ -98,7 +106,8 @@ const confirmPlan = async () => {
       ...userData,
       actualPlan: response.data.newPlan,
       monthlyPrice: response.data.planMonthlyPrice,
-      yearlyPrice: response.data.planYearlyPrice
+      yearlyPrice: response.data.planYearlyPrice,
+      hasSetup: true
     }
     localStorage.setItem('user', JSON.stringify(updatedUserData))
 
