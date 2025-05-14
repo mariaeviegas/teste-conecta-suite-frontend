@@ -8,6 +8,7 @@ const router = useRouter();
 
 const email = ref('')
 const password = ref('')
+const visible = ref(false)
 
 const logar = () => {
     const data = {
@@ -28,8 +29,9 @@ const logar = () => {
         text: "Tente fazer login novamente!",
         icon: "error",
         confirmButtonText: "OK",
-      }).then(() => {
-        location.reload();
+        customClass: {
+            confirmButton: 'swal-custom-confirm'
+        }
       });
     })
 }
@@ -38,9 +40,6 @@ const logar = () => {
 <template>
     <div class="login">
         <div class="login__description">
-            <div>
-                <v-btn density="comfortable" icon="mdi-arrow-left" @click="router.push('/')"></v-btn>
-            </div>
             <div class="login__description__container">
                 <div class="login__description__text">
                     <h1 class="text-h5 font-weight-bold mb-2">Bem-Vindo</h1>
@@ -99,7 +98,7 @@ const logar = () => {
     background: linear-gradient(to bottom, #0D2845, #123C76);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: end;
     padding: 16px;
 }
 

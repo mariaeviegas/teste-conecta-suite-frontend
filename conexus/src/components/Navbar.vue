@@ -10,11 +10,12 @@ const logout = () => {
         text: "Deseja sair de sua conta?",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#3B9D3B",
-        cancelButtonColor: "#dadada",
-        cancelTextColor: "#00000",
         cancelButtonText: "Cancelar",
         confirmButtonText: "Sair",
+        customClass: {
+            confirmButton: 'swal-custom-confirm',
+            cancelButton: 'swal-custom-cancel'
+        }
     }).then((result) => {
 
         if (result.value == true) {
@@ -34,9 +35,10 @@ const logout = () => {
                 <h1 style="color: #EC7616; font-size: 28px; font-weight: bold;">nexus</h1>
             </div>
 
-            <v-list class="w-80">
-                <v-list-item class="py-4 text-h6" prepend-icon="mdi mdi-account-circle" title="Meu plano"></v-list-item>
-                <v-list-item class="py-4 text-h6" prepend-icon="mdi mdi-help-circle" title="Ajuda"></v-list-item>
+            <v-list>
+                <v-btn prepend-icon="mdi mdi-account-circle" color="blue" elevation="0">
+                    Meu plano
+                </v-btn>
             </v-list>
 
             <div class="pa-2" style="width: 80%;">

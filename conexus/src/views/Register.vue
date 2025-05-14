@@ -9,6 +9,7 @@ const router = useRouter();
 const name = ref('')
 const email = ref('')
 const password = ref('')
+const visible = ref(false)
 
 const register = () => {
    
@@ -25,8 +26,11 @@ const register = () => {
         text: "Sua empresa foi cadastrada com sucesso! Realize o login.",
         icon: "success",
         confirmButtonText: "OK",
+        customClass: {
+            confirmButton: 'swal-custom-confirm'
+        }
       }).then(() => {
-        router.push('/login');
+        router.push('/');
       });
     })
     .catch((error) => {
@@ -35,6 +39,9 @@ const register = () => {
         text: "Empresa não cadastrada. Tente novamente!",
         icon: "error",
         confirmButtonText: "OK",
+        customClass: {
+            confirmButton: 'swal-custom-confirm'
+        }
       }).then(() => {
         location.reload();
       });
@@ -44,9 +51,6 @@ const register = () => {
 <template>
     <div class="register">
         <div class="register__form">
-            <div class="w-100 pt-8 pl-8">
-            <v-btn density="comfortable" icon="mdi-arrow-left" color="deep-blue" @click="router.push('/')"></v-btn>
-            </div>
             <div>
                 <v-card class="pl-12 pr-12 pt-8 pb-8" elevation="8" width="600" rounded="lg">
                     <div class="mb-8 text-center text-h6 text-uppercase font-weight-bold text-color-custom">Cadastro
@@ -70,7 +74,7 @@ const register = () => {
                     </v-btn>
 
                     <v-card-text class="text-center">
-                        <a class="text-blue text-decoration-none" rel="noopener noreferrer" @click="router.push('/login')">
+                        <a class="text-blue text-decoration-none" rel="noopener noreferrer" @click="router.push('/')">
                             Entrar <v-icon icon="mdi-chevron-right"></v-icon>
                         </a>
                     </v-card-text>
@@ -140,7 +144,7 @@ const register = () => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: start;
+    justify-content: center;
     gap: 16px;
 }
 

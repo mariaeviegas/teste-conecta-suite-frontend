@@ -15,3 +15,13 @@ button, input, textarea, select {
   outline: none;
   background: none;
 }
+
+.swal-custom-confirm {
+  background-color: #EC7616 !important;
+  color: white !important;
+  border: none !important;
+}
+
+.swal-custom-cancel{
+    color: white !important;
+}

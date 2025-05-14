@@ -119,7 +119,7 @@ const formatPrice = (value) => {
             </v-row>
 
              <PlanModal :open="showDialog" :plano="planoSelecionado" @close="showDialog = false" />
-             <SetupModal :open="showSetupModal" :setupPrice="setupPrice"  @close="showSetupModal = false"/>
+             <SetupModal :open="showSetupModal" :setupPrice="setupPrice"  @close="showSetupModal = false" @updatePlans="getPlans()"/>
         </div>
     </div>
 
