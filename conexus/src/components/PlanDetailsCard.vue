@@ -14,6 +14,10 @@ defineProps ({
         type: Number,
         required: true
     },
+    discount: {
+        type: Number,
+        required: false
+    },
     type: {
         type: String,
         required: true
@@ -49,7 +53,9 @@ const formatPrice = (value) => {
 
                 <div class="d-flex flex-row align-center mt-8">
                     <div :class="isActualPlan ? 'text-h6 font-weight-bold text-custom-actual me-1' : 'text-h6 font-weight-bold text-custom me-1'">R$ {{ formatPrice(planPrice) }}</div>
-                    <div :class="isActualPlan ? 'text-caption font-weight-regular text-custom-actual' : 'text-caption font-weight-regular text-custom'">/{{ type }}</div>
+                    <div :class="isActualPlan ? 'text-caption font-weight-regular text-custom-actual me-4' : 'text-caption font-weight-regular text-custom me-4'">/{{ type }}</div>
+
+                    <div v-if="type == 'anual' && planName != 'Basic'" style="color: #ec7616;" :class="isActualPlan ? 'text-caption font-weight-bold text-custom-actual' : 'text-caption font-weight-bold text-custom'">- {{ discount.toFixed(2) }}%</div>
                 </div>
             </div>
 
