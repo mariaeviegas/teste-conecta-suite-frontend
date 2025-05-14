@@ -40,15 +40,22 @@ onMounted(() => {
 })
 
 const planosComPreco = computed(() => {
-    return plans.value.map(p => ({
-        planName: p.label,
-        planDescription: p.description,
-        planPrice: modo.value === 'mensal' ? p.monthlyPrice : p.yearlyPrice,
-        type: modo.value,
-        setupPrice: p.setupPrice,
-        isActualPlan: p.label === actualPlanName,
-        hasSetup: hasSetup
-    }))
+  return plans.value.map(p => {
+    const mensal = p.monthlyPrice
+    const anual = p.yearlyPrice
+    const desconto = (1 - (anual / (mensal * 12))) * 100
+
+    return {
+      planName: p.label,
+      planDescription: p.description,
+      planPrice: modo.value === 'mensal' ? mensal : anual,
+      type: modo.value,
+      setupPrice: p.setupPrice,
+      discount: modo.value === 'anual' ? desconto : null,
+      isActualPlan: p.label === actualPlanName,
+      hasSetup: hasSetup
+    }
+  })
 })
 
 const actualPlanDetails = computed(() => {
@@ -119,7 +126,7 @@ const formatPrice = (value) => {
             </v-row>
 
              <PlanModal :open="showDialog" :plano="planoSelecionado" @close="showDialog = false" />
-             <SetupModal :open="showSetupModal" :setupPrice="setupPrice"  @close="showSetupModal = false"/>
+             <SetupModal :open="showSetupModal" :setupPrice="setupPrice"  @close="showSetupModal = false" @updatePlans="getPlans()"/>
         </div>
     </div>
 

@@ -48,6 +48,9 @@ const confirmSetup = async () => {
     text: `O serviço de configuração do setup inicial foi contratado com sucesso!`,
     icon: "success",
     confirmButtonText: "OK",
+    customClass: {
+      confirmButton: 'swal-custom-confirm'
+    }
     })
     
     const updatedUserData = {
@@ -68,6 +71,9 @@ const confirmSetup = async () => {
       text: `Ocorreu um erro ao contratar o serviço de configuração do setup. Tente novamente!`,
       icon: "error",
       confirmButtonText: "OK",
+      customClass: {
+        confirmButton: 'swal-custom-confirm'
+      }
     })  
     
     setTimeout(() => {

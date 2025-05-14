@@ -92,6 +92,9 @@ const confirmPlan = async () => {
         text: `O plano ${planName.value} foi contratado com sucesso. Aproveite os benefícios!`,
         icon: "success",
         confirmButtonText: "OK",
+        customClass: {
+            confirmButton: 'swal-custom-confirm'
+        }
       })
     } else {
       Swal.fire({
@@ -99,6 +102,9 @@ const confirmPlan = async () => {
         text: `Seu plano foi alterado para ${planName.value} com sucesso. Aproveite os benefícios!`,
         icon: "success",
         confirmButtonText: "OK",
+        customClass: {
+          confirmButton: 'swal-custom-confirm'
+        }
       })
     }
     
