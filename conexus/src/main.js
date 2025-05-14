@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
+import './assets/styles/global.css'
 
 import '@mdi/font/css/materialdesignicons.css';
 import 'vuetify/styles';
@@ -22,6 +23,19 @@ const vuetify = createVuetify({
       mdi,
     },
   },
+   theme: {
+    defaultTheme: 'myCustomTheme',
+    themes: {
+      myCustomTheme: {
+        colors: {
+          'white': '#fff',
+          'deep-blue': '#0d2845',
+          'blue': '#1E62BF',
+          'orange': '#ec7616'
+        }
+      }
+    }
+  }
 });
 
 const app = createApp(App)
